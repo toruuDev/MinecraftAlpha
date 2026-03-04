@@ -27,8 +27,12 @@ public class EntityPlayerSP extends EntityPlayer {
 	public EntityPlayerSP(Minecraft var1, World var2, Session var3) {
 		super(var2);
 		this.mc = var1;
+
+		// toru: remove and replace old www.minecraft.net/skin/ because
+		// it has been deprecated for 10 years
+
 		if(var3 != null && var3.username != null && var3.username.length() > 0) {
-			this.skinUrl = "http://www.minecraft.net/skin/" + var3.username + ".png";
+			this.skinUrl = "https://minotar.net/skin/" + var3.username + ".png";
 			System.out.println("Loading texture " + this.skinUrl);
 		}
 

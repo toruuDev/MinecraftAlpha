@@ -145,7 +145,7 @@ public class GuiIngame extends Gui {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		String var21;
-		if(Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+		if(Keyboard.getEventKey() == Keyboard.KEY_F3) {
 			var8.drawStringWithShadow("Minecraft Alpha v1.1.2_01 (" + this.mc.debug + ")", 2, 2, 16777215);
 			var8.drawStringWithShadow(this.mc.debugInfoRenders(), 2, 12, 16777215);
 			var8.drawStringWithShadow(this.mc.getEntityDebug(), 2, 22, 16777215);

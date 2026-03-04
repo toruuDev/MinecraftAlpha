@@ -13,14 +13,18 @@ public class EntityOtherPlayerMP extends EntityPlayer {
 	private double otherPlayerMPPitch;
 	float unusedFloat = 0.0F;
 
-	public EntityOtherPlayerMP(World var1, String var2) {
+	public EntityOtherPlayerMP(World var1, String username) {
 		super(var1);
-		this.username = var2;
+		this.username = username;
 		this.yOffset = 0.0F;
 		this.stepHeight = 0.0F;
-		if(var2 != null && var2.length() > 0) {
-			this.skinUrl = "http://www.minecraft.net/skin/" + var2 + ".png";
-			System.out.println("Loading texture " + this.skinUrl);
+
+		// toru: remove and replace old www.minecraft.net/skin/ because
+		// it has been deprecated for 10 years
+
+		if(username != null && username.length() > 0) {
+			this.skinUrl = "https://crafatar.com/skins/"+username;
+			System.out.println("Loading skin texture " + this.skinUrl);
 		}
 
 		this.noClip = true;
