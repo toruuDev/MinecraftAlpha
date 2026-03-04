@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'net.minecraft'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.lwjgl.lwjgl:lwjgl:2.9.3'
+    implementation 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
+    implementation 'net.java.jinput:jinput:2.0.5'
+
+    implementation fileTree(dir: 'libs', include: ['**/*.jar'])
+
+}
+
+application {
+    mainClass = 'net.minecraft.client.Minecraft'
+}
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs "-Djava.library.path=${projectDir}/natives"
+}
