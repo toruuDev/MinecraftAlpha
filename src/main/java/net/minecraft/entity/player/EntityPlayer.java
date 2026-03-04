@@ -28,6 +28,7 @@ public class EntityPlayer extends EntityLiving {
 	public int swingProgressInt = 0;
 	public String username;
 	private int damageRemainder = 0;
+	public boolean creativeMode = false;
 
 	public EntityPlayer(World var1) {
 		super(var1);
@@ -213,6 +214,8 @@ public class EntityPlayer extends EntityLiving {
 	}
 
 	public boolean attackEntityFrom(Entity var1, int var2) {
+		if(this.creativeMode) return false;
+
 		this.entityAge = 0;
 		if(this.health <= 0) {
 			return false;

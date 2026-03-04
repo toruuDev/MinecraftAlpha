@@ -35,20 +35,24 @@ public class PlayerControllerSP extends PlayerController {
 	}
 
 	public boolean sendBlockRemoved(int var1, int var2, int var3, int var4) {
+
 		int var5 = this.mc.theWorld.getBlockId(var1, var2, var3);
 		int var6 = this.mc.theWorld.getBlockMetadata(var1, var2, var3);
 		boolean var7 = super.sendBlockRemoved(var1, var2, var3, var4);
 		ItemStack var8 = this.mc.thePlayer.getCurrentEquippedItem();
 		boolean var9 = this.mc.thePlayer.canHarvestBlock(Block.blocksList[var5]);
-		if(var8 != null) {
-			var8.onDestroyBlock(var5, var1, var2, var3);
-			if(var8.stackSize == 0) {
-				var8.onItemDestroyedByUse(this.mc.thePlayer);
-				this.mc.thePlayer.destroyCurrentEquippedItem();
+
+		if(!this.mc.thePlayer.creativeMode) {
+			if(var8 != null) {
+				var8.onDestroyBlock(var5, var1, var2, var3);
+				if(var8.stackSize == 0) {
+					var8.onItemDestroyedByUse(this.mc.thePlayer);
+					this.mc.thePlayer.destroyCurrentEquippedItem();
+				}
 			}
 		}
 
-		if(var7 && var9) {
+		if(var7 && (var9 || this.mc.thePlayer.creativeMode)) {
 			Block.blocksList[var5].harvestBlock(this.mc.theWorld, var1, var2, var3, var6);
 		}
 
@@ -73,6 +77,14 @@ public class PlayerControllerSP extends PlayerController {
 	}
 
 	public void sendBlockRemoving(int var1, int var2, int var3, int var4) {
+		if (this.mc.thePlayer.creativeMode) {
+			int id = this.mc.theWorld.getBlockId(var1, var2, var3);
+			if (id != 0) {
+				this.sendBlockRemoved(var1, var2, var3, var4);
+			}
+			return;
+		}
+
 		if(this.blockHitWait > 0) {
 			--this.blockHitWait;
 		} else {

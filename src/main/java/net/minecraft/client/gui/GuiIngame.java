@@ -64,7 +64,7 @@ public class GuiIngame extends Gui {
 		int var13;
 		int var14;
 		int var15;
-		if(this.mc.playerController.shouldDrawHUD()) {
+		if(this.mc.playerController.shouldDrawHUD() && !this.mc.thePlayer.creativeMode) {
 			var13 = this.mc.thePlayer.getPlayerArmorValue();
 
 			int var16;

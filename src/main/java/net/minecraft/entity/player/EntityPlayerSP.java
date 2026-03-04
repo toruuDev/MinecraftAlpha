@@ -21,6 +21,9 @@ public class EntityPlayerSP extends EntityPlayer {
 	public MovementInput movementInput;
 	private Minecraft mc;
 
+	public boolean isFlying = false;
+	private int flyTimer = 0;
+
 	public EntityPlayerSP(Minecraft var1, World var2, Session var3) {
 		super(var2);
 		this.mc = var1;
@@ -44,6 +47,34 @@ public class EntityPlayerSP extends EntityPlayer {
 		if(this.movementInput.sneak && this.ySize < 0.2F) {
 			this.ySize = 0.2F;
 		}
+
+		if(!this.mc.isMultiplayerWorld() && this.mc.thePlayer.onGround) {
+
+			if (this.creativeMode) {
+				if (this.movementInput.jump) {
+					if (flyTimer == 0) {
+						this.flyTimer = 7;
+					} else {
+						isFlying = !this.isFlying;
+						flyTimer = 0;
+					}
+				}
+			}
+
+			if (flyTimer > 0) {
+				flyTimer--;
+			}
+
+			if (this.creativeMode && this.isFlying) {
+				this.motionY = 0.0d;
+				if (this.movementInput.jump) {
+					this.motionY += 0.5d;
+				}
+				if (this.movementInput.sneak) this.motionY -= 0.5d;
+				this.fallDistance = 0.0f;
+			}
+		}
+
 
 		super.onLivingUpdate();
 	}
@@ -120,7 +151,36 @@ public class EntityPlayerSP extends EntityPlayer {
 		}
 	}
 
-	public void sendChatMessage(String var1) {
+	public void sendChatMessage(String message) {
+
+		if(message.startsWith(".")) {
+			if(message.equalsIgnoreCase(".gamemode creative")) {
+				if(this.mc.isMultiplayerWorld()) {
+					this.mc.ingameGUI.addChatMessage("You cannot change your gamemode inside a mulitplayer instance!.");
+					return;
+				}
+
+				this.creativeMode = true;
+				this.mc.ingameGUI.addChatMessage("Set gamemode to creative.");
+				return;
+			}
+
+			if (message.equalsIgnoreCase(".gamemode survival")) {
+				if(this.mc.isMultiplayerWorld()) {
+					this.mc.ingameGUI.addChatMessage("You cannot change your gamemode inside a mulitplayer instance!.");
+					return;
+				}
+
+				this.creativeMode = false;
+				this.isFlying = false;
+
+				this.mc.ingameGUI.addChatMessage("Set gamemode to survival.");
+				return;
+			}
+
+			this.mc.ingameGUI.addChatMessage("Unknown command.");
+			return;
+		}
 	}
 
 	public void onPlayerUpdate() {
