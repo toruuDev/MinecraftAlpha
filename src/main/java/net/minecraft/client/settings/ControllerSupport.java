@@ -68,7 +68,7 @@ public class ControllerSupport {
         }
     }
     public void tick() {
-        if(controller == null) {
+        if (controller == null) {
             return;
         }
 
@@ -86,18 +86,38 @@ public class ControllerSupport {
     }
 
     private void triggers() {
-        if(mc.currentScreen != null) {
-            return;
+
+        if(mc.currentScreen != null) return;
+
+        float trigger = controller.getZAxisValue();
+
+        boolean attack = trigger < -0.3f; // LT
+        boolean use = trigger > 0.3f;     // RT
+
+        if(mc.objectMouseOver == null) return;
+
+        if(attack) {
+
+            if(mc.objectMouseOver.typeOfHit == 0) { // block
+                mc.playerController.sendBlockRemoving(
+                        mc.objectMouseOver.blockX,
+                        mc.objectMouseOver.blockY,
+                        mc.objectMouseOver.blockZ,
+                        mc.objectMouseOver.sideHit
+                );
+            }
+
+            if(mc.objectMouseOver.typeOfHit == 1) { // entity
+                mc.clickMouse(0);
+            }
         }
 
-        float r2 = controller.getZAxisValue();
-
-        if (r2 > 0.5f) {
-            mc.clickMouse(0);
-        }
-
-        if (r2 < -0.5f) {
+        if(use) {
             mc.clickMouse(1);
+        }
+
+        if(!attack) {
+            mc.playerController.resetBlockRemoving();
         }
     }
 
@@ -107,8 +127,10 @@ public class ControllerSupport {
         float moveX = applyDeadzone(controller.getXAxisValue());
         float moveY = applyDeadzone(controller.getYAxisValue());
 
-        mc.thePlayer.moveStrafing = moveX;
-        mc.thePlayer.moveForward = -moveY;
+        mc.thePlayer.movementInput.moveStrafe = -moveX;
+        mc.thePlayer.movementInput.moveForward = -moveY;
+
+        mc.thePlayer.movementInput.sneak = controller.isButtonPressed(ControllerButtons.BACK.get());
     }
 
     private void camera() {
@@ -142,10 +164,8 @@ public class ControllerSupport {
     }
 
     private void buttons() {
-
-        if (pressedOnce(ControllerButtons.A.get()) && mc.currentScreen == null) {
-            mc.thePlayer.jump();
-        }
+        if(mc.thePlayer == null) return;
+        mc.thePlayer.movementInput.jump = controller.isButtonPressed(ControllerButtons.A.get());
 
         if (pressedOnce(ControllerButtons.B.get()) && mc.currentScreen == null) {
             mc.thePlayer.dropPlayerItemWithRandomChoice(
@@ -163,9 +183,9 @@ public class ControllerSupport {
             }
         }
 
-        if (pressedOnce(ControllerButtons.X.get()) && mc.currentScreen == null) {
-            mc.displayGuiScreen(new GuiCrafting(mc.thePlayer.inventory));
-        }
+    //    if (pressedOnce(ControllerButtons.X.get()) && mc.currentScreen == null) {
+    //        mc.displayGuiScreen(new GuiCrafting(mc.thePlayer.inventory));
+    //    }
     }
 
     private enum ControllerButtons {

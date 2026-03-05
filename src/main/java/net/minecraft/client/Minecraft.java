@@ -64,7 +64,6 @@ import org.lwjgl.util.glu.GLU;
 import net.minecraft.util.GLAllocation;
 
 @SuppressWarnings("all")
-
 public abstract class Minecraft implements Runnable {
 	public PlayerController playerController;
 	private boolean fullscreen = false;
@@ -786,10 +785,6 @@ public abstract class Minecraft implements Runnable {
 		this.entityRenderer.getMouseOver(1.0F);
 		if(this.thePlayer != null) {
 			this.thePlayer.onPlayerUpdate();
-		}
-
-		if(this.controllerSupport != null && thePlayer != null) {
-			this.controllerSupport.tick();
 		}
 
 		if(!this.isGamePaused && this.theWorld != null) {

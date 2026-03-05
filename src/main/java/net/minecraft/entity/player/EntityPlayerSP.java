@@ -52,6 +52,10 @@ public class EntityPlayerSP extends EntityPlayer {
 			this.ySize = 0.2F;
 		}
 
+		if(mc.controllerSupport != null && mc.thePlayer != null) {
+			mc.controllerSupport.tick();
+		}
+
 		if(!this.mc.isMultiplayerWorld() && this.mc.thePlayer.onGround) {
 
 			if (this.creativeMode) {
