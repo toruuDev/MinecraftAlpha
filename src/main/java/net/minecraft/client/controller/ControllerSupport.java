@@ -1,7 +1,6 @@
-package net.minecraft.client.settings;
+package net.minecraft.client.controller;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiCrafting;
 import net.minecraft.client.gui.GuiInventory;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Controller;
@@ -85,39 +84,38 @@ public class ControllerSupport {
         return Math.abs(value) < deadzone ? 0 : value;
     }
 
-    private void triggers() {
+    private boolean lastAttack = false;
+    private boolean lastUse = false;
 
-        if(mc.currentScreen != null) return;
+    private void triggers() {
+        // very dangerous shit
+        if (controller == null) return;
 
         float trigger = controller.getZAxisValue();
 
-        boolean attack = trigger < -0.3f; // LT
-        boolean use = trigger > 0.3f;     // RT
+        boolean attackTrigger = trigger < -0.3f;
+        boolean useTrigger = trigger > 0.3f;
 
-        if(mc.objectMouseOver == null) return;
+        if (mc.inGameHasFocus && mc.currentScreen == null) {
 
-        if(attack) {
-
-            if(mc.objectMouseOver.typeOfHit == 0) { // block
-                mc.playerController.sendBlockRemoving(
-                        mc.objectMouseOver.blockX,
-                        mc.objectMouseOver.blockY,
-                        mc.objectMouseOver.blockZ,
-                        mc.objectMouseOver.sideHit
-                );
+            // BREAK / ATTACK
+            if (attackTrigger) {
+                MouseController.holdLeftMouse();
+            } else {
+                MouseController.releaseLeftMouse();
             }
 
-            if(mc.objectMouseOver.typeOfHit == 1) { // entity
-                mc.clickMouse(0);
+            // PLACE / USE
+            if (useTrigger) {
+                MouseController.holdRightMouse();
+            } else {
+                MouseController.releaseRightMouse();
             }
-        }
 
-        if(use) {
-            mc.clickMouse(1);
-        }
+        } else {
 
-        if(!attack) {
-            mc.playerController.resetBlockRemoving();
+            MouseController.releaseLeftMouse();
+            MouseController.releaseRightMouse();
         }
     }
 

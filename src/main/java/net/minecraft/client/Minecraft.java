@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.io.File;
 
 import net.minecraft.client.gui.*;
-import net.minecraft.client.settings.ControllerSupport;
+import net.minecraft.client.controller.ControllerSupport;
 import net.minecraft.inventory.CreativeInventory;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.block.Block;
@@ -87,7 +87,7 @@ public abstract class Minecraft implements Runnable {
 	public EntityRenderer entityRenderer = new EntityRenderer(this);
 	private ThreadDownloadResources downloadResourcesThread;
 	private int ticksRan = 0;
-	private int leftClickCounter = 0;
+	public int leftClickCounter = 0;
 	private int tempDisplayWidth;
 	private int tempDisplayHeight;
 	public String loadMapUser = null;
