@@ -9,26 +9,17 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.io.File;
 
+import net.minecraft.client.gui.*;
 import net.minecraft.client.settings.ControllerSupport;
+import net.minecraft.inventory.CreativeInventory;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.player.EntityPlayerSP;
 import net.minecraft.entity.EntityRenderer;
 import net.minecraft.client.enums.EnumOS;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.GameWindowListener;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiConflictWarning;
-import net.minecraft.client.gui.GuiConnecting;
-import net.minecraft.client.gui.GuiErrorScreen;
-import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiInventory;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -45,7 +36,6 @@ import net.minecraft.client.multiplayer.PlayerControllerCreative;
 import net.minecraft.client.renderer.entity.RenderEngine;
 import net.minecraft.client.renderer.entity.RenderGlobal;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.Session;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -880,7 +870,12 @@ public abstract class Minecraft implements Runnable {
 												}
 
 												if(Keyboard.getEventKey() == this.options.keyBindInventory.keyCode) {
-													this.displayGuiScreen(new GuiInventory(this.thePlayer.inventory, this.thePlayer.inventory.craftingInventory));
+													if (thePlayer.creativeMode) {
+														this.displayGuiScreen(new GuiCreative(thePlayer.inventory,
+																new CreativeInventory(54)));
+													} else {
+														this.displayGuiScreen(new GuiInventory(this.thePlayer.inventory, this.thePlayer.inventory.craftingInventory));
+													}
 												}
 
 												if(Keyboard.getEventKey() == this.options.keyBindDrop.keyCode) {
