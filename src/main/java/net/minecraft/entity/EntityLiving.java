@@ -58,8 +58,8 @@ public class EntityLiving extends Entity {
 	private double newRotationPitch;
 	float unusedFloat3 = 0.0F;
 	protected int entityAge = 0;
-	protected float moveStrafing;
-	protected float moveForward;
+	public float moveStrafing;
+	public float moveForward;
 	protected float randomYawVelocity;
 	protected boolean isJumping = false;
 	protected float defaultPitch = 0.0F;
@@ -579,7 +579,7 @@ public class EntityLiving extends Entity {
 
 	}
 
-	protected void jump() {
+	public void jump() {
 		this.motionY = (double)0.42F;
 	}
 

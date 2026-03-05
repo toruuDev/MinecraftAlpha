@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.io.File;
+
+import net.minecraft.client.settings.ControllerSupport;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.block.Block;
 import net.minecraft.client.particle.EffectRenderer;
@@ -125,6 +127,7 @@ public abstract class Minecraft implements Runnable {
 	public boolean isRaining = false;
 	long systemTime = System.currentTimeMillis();
 	private int joinPlayerCounter = 0;
+	public ControllerSupport controllerSupport;
 
 	public Minecraft(Component var1, Canvas var2, MinecraftApplet var3, int var4, int var5, boolean var6) {
 		this.tempDisplayWidth = var4;
@@ -241,6 +244,7 @@ public abstract class Minecraft implements Runnable {
 			this.displayGuiScreen(new GuiMainMenu());
 		}
 
+		this.controllerSupport = new ControllerSupport(this);
 	}
 
 	private void loadScreen() throws LWJGLException {
@@ -625,7 +629,7 @@ public abstract class Minecraft implements Runnable {
 		}
 	}
 
-	private void clickMouse(int var1) {
+	public void clickMouse(int var1) {
 		if(var1 != 0 || this.leftClickCounter <= 0) {
 			if(var1 == 0) {
 				this.thePlayer.swingItem();
@@ -792,6 +796,10 @@ public abstract class Minecraft implements Runnable {
 		this.entityRenderer.getMouseOver(1.0F);
 		if(this.thePlayer != null) {
 			this.thePlayer.onPlayerUpdate();
+		}
+
+		if(this.controllerSupport != null && thePlayer != null) {
+			this.controllerSupport.tick();
 		}
 
 		if(!this.isGamePaused && this.theWorld != null) {
