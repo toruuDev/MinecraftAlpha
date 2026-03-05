@@ -12,7 +12,6 @@ import java.util.Date;
 
 import net.minecraft.client.gui.canvas.CanvasCrashReport;
 import net.minecraft.client.gui.canvas.CanvasMojangLogo;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 public class PanelCrashReport extends Panel {
@@ -32,7 +31,7 @@ public class PanelCrashReport extends Panel {
 			var5 = var5 + "OS: " + System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version") + "\n";
 			var5 = var5 + "Java: " + System.getProperty("java.version") + ", " + System.getProperty("java.vendor") + "\n";
 			var5 = var5 + "VM: " + System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor") + "\n";
-			var5 = var5 + "LWJGL: " + Sys.getVersion() + "\n";
+		//	var5 = var5 + "LWJGL: " + Sys.getVersion() + "\n";
 			var4 = GL11.glGetString(GL11.GL_VENDOR);
 			var5 = var5 + "OpenGL: " + GL11.glGetString(GL11.GL_RENDERER) + " version " + GL11.glGetString(GL11.GL_VERSION) + ", " + GL11.glGetString(GL11.GL_VENDOR) + "\n";
 		} catch (Throwable var8) {

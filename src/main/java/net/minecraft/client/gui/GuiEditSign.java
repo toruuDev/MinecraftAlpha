@@ -3,7 +3,7 @@ package net.minecraft.client.gui;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tile.TileEntityRenderer;
 import net.minecraft.client.renderer.tile.TileEntitySign;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.lwjgl2_layer.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEditSign extends GuiScreen {

@@ -20,12 +20,13 @@ import net.minecraft.material.Material;
 import net.minecraft.client.renderer.culling.ClippingHelperImplementation;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
+
+import net.minecraft.util.lwjgl2_layer.*;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.NVFogDistance;
-import org.lwjgl.util.glu.GLU;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class EntityRenderer {
 	private Minecraft mc;
@@ -255,8 +256,8 @@ public class EntityRenderer {
 	}
 
 	public void updateCameraAndRender(float var1) {
-		if(!Display.isActive()) {
-			if(System.currentTimeMillis() - this.prevFrameTime > 500L) {
+		if (glfwGetWindowAttrib(mc.window, GLFW_FOCUSED) == GLFW_FALSE) {
+			if (System.currentTimeMillis() - this.prevFrameTime > 500L) {
 				this.mc.displayInGameMenu();
 			}
 		} else {
@@ -567,7 +568,12 @@ public class EntityRenderer {
 
 	private void setupFog(int var1) {
 		EntityPlayerSP var2 = this.mc.thePlayer;
-		GL11.glFog(GL11.GL_FOG_COLOR, this.setFogColorBuffer(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 1.0F));
+		GL11.glFogfv(GL11.GL_FOG_COLOR, this.setFogColorBuffer(
+				this.fogColorRed,
+				this.fogColorGreen,
+				this.fogColorBlue,
+				1.0F
+		));
 		GL11.glNormal3f(0.0F, -1.0F, 0.0F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		float var3;
@@ -607,7 +613,7 @@ public class EntityRenderer {
 				GL11.glFogf(GL11.GL_FOG_END, this.farPlaneDistance * 0.8F);
 			}
 
-			if(GLContext.getCapabilities().GL_NV_fog_distance) {
+			if(GL.getCapabilities().GL_NV_fog_distance) {
 				GL11.glFogi(NVFogDistance.GL_FOG_DISTANCE_MODE_NV, NVFogDistance.GL_EYE_RADIAL_NV);
 			}
 		}

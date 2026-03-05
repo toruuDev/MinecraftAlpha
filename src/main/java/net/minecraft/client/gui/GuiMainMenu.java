@@ -13,7 +13,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderBlocks;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
+
+import net.minecraft.util.lwjgl2_layer.GLU;
 
 public class GuiMainMenu extends GuiScreen {
 	private static final Random rand = new Random();

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.util.lwjgl2_layer.*;
 
 public class GuiScreen extends Gui {
 	protected Minecraft mc;

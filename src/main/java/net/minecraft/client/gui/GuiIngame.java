@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.inventory.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.material.Material;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.lwjgl2_layer.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -160,6 +160,7 @@ public class GuiIngame extends Gui {
 			this.drawString(var8, var21, var6 - var8.getStringWidth(var21) - 2, 12, 14737632);
 		} else {
 			var8.drawStringWithShadow("Minecraft Alpha v1.1.2_01", 2, 2, 16777215);
+			var8.drawStringWithShadow("LWJGL Version: " + org.lwjgl.Version.getVersion() , 2, 12, 16777215);
 		}
 
 		if(this.recordPlayingUpFor > 0) {

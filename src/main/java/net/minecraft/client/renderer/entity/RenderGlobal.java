@@ -490,16 +490,26 @@ public class RenderGlobal implements IWorldAccess {
 		for(int var3 = var1; var3 < var2; ++var3) {
 			if(this.sortedWorldRenderers[var3].isWaitingOnOcclusionQuery) {
 				this.occlusionResult.clear();
-				ARBOcclusionQuery.glGetQueryObjectuARB(this.sortedWorldRenderers[var3].glOcclusionQuery, GL15.GL_QUERY_RESULT_AVAILABLE, this.occlusionResult);
+
+				GL15.glGetQueryObjectuiv(
+						this.sortedWorldRenderers[var3].glOcclusionQuery,
+						GL15.GL_QUERY_RESULT_AVAILABLE,
+						this.occlusionResult
+				);
+
 				if(this.occlusionResult.get(0) != 0) {
 					this.sortedWorldRenderers[var3].isWaitingOnOcclusionQuery = false;
 					this.occlusionResult.clear();
-					ARBOcclusionQuery.glGetQueryObjectuARB(this.sortedWorldRenderers[var3].glOcclusionQuery, GL15.GL_QUERY_RESULT, this.occlusionResult);
+
+					GL15.glGetQueryObjectuiv(
+							this.sortedWorldRenderers[var3].glOcclusionQuery,
+							GL15.GL_QUERY_RESULT, this.occlusionResult
+					);
+
 					this.sortedWorldRenderers[var3].isVisible = this.occlusionResult.get(0) != 0;
-				}
+				}// rewritten by toru for lwjgl3
 			}
 		}
-
 	}
 
 	private int renderSortedRenderers(int var1, int var2, int var3, double var4) {

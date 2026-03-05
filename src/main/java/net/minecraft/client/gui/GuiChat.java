@@ -1,6 +1,6 @@
 package net.minecraft.client.gui;
 
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.lwjgl2_layer.Keyboard;
 
 public class GuiChat extends GuiScreen {
 	private String message = "";

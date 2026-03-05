@@ -1,47 +1,65 @@
 package net.minecraft.util;
 
-import java.awt.Component;
-import java.nio.IntBuffer;
-
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
+import org.lwjgl.glfw.GLFW;
 
 public class MouseHelper {
-	private Component windowComponent;
-	private Cursor cursor;
+
+	// rewritten by toru
+
+	private long window;
+
+	private double lastMouseX;
+	private double lastMouseY;
+
 	public int deltaX;
 	public int deltaY;
-	private int mouseInt = 10;
 
-	public MouseHelper(Component var1) {
-		this.windowComponent = var1;
-		IntBuffer var2 = GLAllocation.createDirectIntBuffer(1);
-		var2.put(0);
-		var2.flip();
-		IntBuffer var3 = GLAllocation.createDirectIntBuffer(1024);
+	public MouseHelper(long window) {
+		this.window = window;
 
-		try {
-			this.cursor = new Cursor(32, 32, 16, 16, 1, var3, var2);
-		} catch (LWJGLException var5) {
-			var5.printStackTrace();
-		}
+		double[] x = new double[1];
+		double[] y = new double[1];
 
-	}
+		GLFW.glfwGetCursorPos(window, x, y);
 
-	public void grabMouseCursor() {
-		Mouse.setGrabbed(true);
-		this.deltaX = 0;
-		this.deltaY = 0;
-	}
-
-	public void ungrabMouseCursor() {
-		Mouse.setCursorPosition(this.windowComponent.getWidth() / 2, this.windowComponent.getHeight() / 2);
-		Mouse.setGrabbed(false);
+		lastMouseX = x[0];
+		lastMouseY = y[0];
 	}
 
 	public void mouseXYChange() {
-		this.deltaX = Mouse.getDX();
-		this.deltaY = Mouse.getDY();
+
+		double[] x = new double[1];
+		double[] y = new double[1];
+
+		GLFW.glfwGetCursorPos(window, x, y);
+
+		double mouseX = x[0];
+		double mouseY = y[0];
+
+		deltaX = (int)(mouseX - lastMouseX);
+
+		deltaY = (int)(lastMouseY - mouseY);
+
+		lastMouseX = mouseX;
+		lastMouseY = mouseY;
+	}
+
+	public void grabMouseCursor() {
+		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+
+		double[] x = new double[1];
+		double[] y = new double[1];
+
+		GLFW.glfwGetCursorPos(window, x, y);
+
+		lastMouseX = x[0];
+		lastMouseY = y[0];
+
+		deltaX = 0;
+		deltaY = 0;
+	}
+
+	public void ungrabMouseCursor() {
+		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 	}
 }

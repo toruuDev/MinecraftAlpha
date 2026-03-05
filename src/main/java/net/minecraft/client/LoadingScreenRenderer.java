@@ -4,7 +4,7 @@ import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MinecraftError;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 public class LoadingScreenRenderer implements IProgressUpdate {
@@ -115,7 +115,9 @@ public class LoadingScreenRenderer implements IProgressUpdate {
 
 				this.mc.fontRenderer.drawStringWithShadow(this.currentlyDisplayedText, (var5 - this.mc.fontRenderer.getStringWidth(this.currentlyDisplayedText)) / 2, var6 / 2 - 4 - 16, 16777215);
 				this.mc.fontRenderer.drawStringWithShadow(this.currentlyDisplayedProgress, (var5 - this.mc.fontRenderer.getStringWidth(this.currentlyDisplayedProgress)) / 2, var6 / 2 - 4 + 8, 16777215);
-				Display.update();
+			//	Display.update();
+				GLFW.glfwSwapBuffers(mc.window);
+				GLFW.glfwPollEvents();
 
 				try {
 					Thread.yield();
