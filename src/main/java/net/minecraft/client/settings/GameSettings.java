@@ -37,6 +37,10 @@ public class GameSettings {
 	public int difficulty = 2;
 	public boolean thirdPersonView = false;
 
+	public boolean controllerEnabled;
+	public float interfaceSensitivity = 0.5F;
+	public float controllerSensitivity = 0.5F;
+
 	public GameSettings(Minecraft var1, File var2) {
 		this.mc = var1;
 		this.optionsFile = new File(var2, "options.txt");

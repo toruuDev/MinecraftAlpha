@@ -53,4 +53,10 @@ public class MouseController {
             rightHeld = false;
         }
     }
+
+    public static void clickLeftMouse() {
+        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+    }
 }

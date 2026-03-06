@@ -23,7 +23,9 @@ public class GuiOptions extends GuiScreen {
 		}
 
 		this.controlList.add(new GuiButton(100, this.width / 2 - 100, this.height / 6 + 120 + 12, "Controls..."));
-		this.controlList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 168, "Done"));
+		this.controlList.add(new GuiButton(300, this.width / 2 - 100, this.height / 6 + 140 + 12, "Controller Settings.."));
+		this.controlList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 160 + 12, "Done"));
+
 	}
 
 	protected void actionPerformed(GuiButton var1) {
@@ -39,6 +41,10 @@ public class GuiOptions extends GuiScreen {
 
 			if(var1.id == 200) {
 				this.mc.displayGuiScreen(this.parentScreen);
+			}
+
+			if(var1.id == 300) {
+				this.mc.displayGuiScreen(new GuiController(this.parentScreen, this.options));
 			}
 
 		}

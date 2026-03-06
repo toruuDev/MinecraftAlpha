@@ -16,6 +16,7 @@ public class GuiIngameMenu extends GuiScreen {
 		}
 
 		this.controlList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24, "Back to game"));
+
 		this.controlList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96, "Options..."));
 	}
 

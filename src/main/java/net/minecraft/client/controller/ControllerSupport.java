@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiInventory;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
+import org.lwjgl.input.Mouse;
 
 /*
     made by toruuDev
@@ -18,10 +19,16 @@ public class ControllerSupport {
     private boolean[] lastButtons = new boolean[16];
 
     private float deadzone = 0.2f;
-    private float lookSensitivity = 6.0f;
+    private float lookSensitivity;
+
+    // virtual cursor
+    private float cursorX;
+    private float cursorY;
+    private float cursorSpeed;
 
     public ControllerSupport(Minecraft mc) {
         this.mc = mc;
+
         initialize();
     }
 
@@ -30,6 +37,10 @@ public class ControllerSupport {
         boolean result = pressed && !lastButtons[button];
         lastButtons[button] = pressed;
         return result;
+    }
+
+    public boolean controllerEnabled() {
+        return mc.options.controllerEnabled;
     }
 
     private void initialize() {
@@ -51,25 +62,34 @@ public class ControllerSupport {
                             "Controller connected: " + controller.getName()
                     );
 
+                    if(!controllerEnabled()) {
+                        mc.ingameGUI.addChatMessage("Controller is not enabled. go into settings and enable it ");
+                    }
+
                     System.out.println("Using controller: " + controller.getName());
 
-
+                    cursorX = Mouse.getX();
+                    cursorY = Mouse.getY();
                     break;
                 }
-            }
-
-            if (controller == null) {
-            //    System.out.println("No controller found.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public void tick() {
         if (controller == null) {
             return;
         }
+
+        if(!controllerEnabled()) {
+            return;
+        }
+
+        lookSensitivity = mc.options.controllerSensitivity * 10F;
+        cursorSpeed = mc.options.interfaceSensitivity * 20F;
 
         Controllers.poll();
 
@@ -78,6 +98,7 @@ public class ControllerSupport {
         buttons();
         triggers();
         bumpers();
+        guiCursor();
     }
 
     private float applyDeadzone(float value) {
@@ -88,8 +109,10 @@ public class ControllerSupport {
     private boolean lastUse = false;
 
     private void triggers() {
-        // very dangerous shit
         if (controller == null) return;
+        if(!controllerEnabled()) {
+            return;
+        }
 
         float trigger = controller.getZAxisValue();
 
@@ -98,14 +121,12 @@ public class ControllerSupport {
 
         if (mc.inGameHasFocus && mc.currentScreen == null) {
 
-            // BREAK / ATTACK
             if (attackTrigger) {
                 MouseController.holdLeftMouse();
             } else {
                 MouseController.releaseLeftMouse();
             }
 
-            // PLACE / USE
             if (useTrigger) {
                 MouseController.holdRightMouse();
             } else {
@@ -171,6 +192,16 @@ public class ControllerSupport {
                             mc.thePlayer.inventory.currentItem, 1), false);
         }
 
+        if (mc.currentScreen != null && pressedOnce(ControllerButtons.A.get())) {
+            MouseController.clickLeftMouse();
+        }
+
+        if(pressedOnce(ControllerButtons.B.get())) {
+            if(mc.currentScreen != null) {
+                mc.displayGuiScreen(null);
+            }
+        }
+
         if (pressedOnce(ControllerButtons.Y.get())) {
 
             if (mc.currentScreen instanceof GuiInventory) {
@@ -180,10 +211,28 @@ public class ControllerSupport {
                 mc.displayGuiScreen(new GuiInventory(mc.thePlayer.inventory, new ItemStack[4]));
             }
         }
+    }
 
-    //    if (pressedOnce(ControllerButtons.X.get()) && mc.currentScreen == null) {
-    //        mc.displayGuiScreen(new GuiCrafting(mc.thePlayer.inventory));
-    //    }
+    private void guiCursor() {
+
+        if(mc.currentScreen == null) return;
+
+        float moveX = applyDeadzone(controller.getXAxisValue());
+        float moveY = applyDeadzone(controller.getYAxisValue());
+
+        cursorX += moveX * cursorSpeed;
+        cursorY += moveY * cursorSpeed;
+
+        int width = mc.displayWidth;
+        int height = mc.displayHeight;
+
+        if(cursorX < 0) cursorX = 0;
+        if(cursorY < 0) cursorY = 0;
+
+        if(cursorX > width) cursorX = width;
+        if(cursorY > height) cursorY = height;
+
+        Mouse.setCursorPosition((int)cursorX, height - (int)cursorY);
     }
 
     private enum ControllerButtons {
